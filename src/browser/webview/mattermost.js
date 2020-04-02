@@ -47,6 +47,15 @@ window.addEventListener('load', () => {
   });
 });
 
+// Sent for drag and drop tabs to work properly
+document.addEventListener('mousemove', (event) => {
+  ipcRenderer.sendToHost('mouse-move', {clientX: event.clientX, clientY: event.clientY});
+});
+
+document.addEventListener('mouseup', () => {
+  ipcRenderer.sendToHost('mouse-up');
+});
+
 // listen for messages from the webapp
 window.addEventListener('message', ({origin, data: {type, message = {}} = {}} = {}) => {
   if (origin !== window.location.origin) {
@@ -68,13 +77,13 @@ window.addEventListener('message', ({origin, data: {type, message = {}} = {}} = 
   }
   case 'dispatch-notification': {
     const {title, body, channel, teamId, silent} = message;
-    ipcRenderer.sendToHost('dispatchNotification', title, body, channel, teamId, silent);
+    ipcRenderer.sendToHost('dispatchNotification', title, body, channel, teamId, silent, () => handleNotificationClick({teamId, channel}));
     break;
   }
   }
 });
 
-ipcRenderer.on('notification-clicked', (event, {channel, teamId}) => {
+const handleNotificationClick = ({channel, teamId}) => {
   window.postMessage(
     {
       type: 'notification-clicked',
@@ -85,6 +94,10 @@ ipcRenderer.on('notification-clicked', (event, {channel, teamId}) => {
     },
     window.location.origin
   );
+};
+
+ipcRenderer.on('notification-clicked', (event, {channel, teamId}) => {
+  handleNotificationClick({channel, teamId});
 });
 
 function hasClass(element, className) {

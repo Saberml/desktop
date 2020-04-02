@@ -41,6 +41,26 @@ module.exports = merge(base, {
       use: {
         loader: 'url-loader',
       },
+    }, {
+      test: /\.(svg)$/,
+      use: [
+        {
+          loader: 'file-loader',
+          options: {
+            name: '[hash].[ext]',
+            publicPath: './',
+          },
+        },
+        {loader: 'image-webpack-loader'},
+      ],
+    }, {
+      test: /\.(eot|ttf|woff|woff2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+      loader: 'file-loader',
+      options: {
+        name: '[name].[ext]',
+        outputPath: '/../assets/fonts',
+        publicPath: './assets/fonts',
+      },
     }],
   },
   node: {

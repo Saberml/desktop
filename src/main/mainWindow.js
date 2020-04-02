@@ -51,7 +51,10 @@ function createMainWindow(config, options) {
     show: hideOnStartup || false,
     minWidth: minimumWindowWidth,
     minHeight: minimumWindowHeight,
+    frame: false,
     fullscreen: false,
+    titleBarStyle: 'hiddenInset',
+    backgroundColor: '#fff', // prevents blurry text: https://electronjs.org/docs/faq#the-font-looks-blurry-what-is-this-and-what-can-i-do
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: false,
@@ -143,20 +146,16 @@ function createMainWindow(config, options) {
         // need to leave fullscreen first, then hide the window
         if (mainWindow.isFullScreen()) {
           mainWindow.once('leave-full-screen', () => {
-            hideWindow(mainWindow);
+            app.hide();
           });
           mainWindow.setFullScreen(false);
         } else {
-          hideWindow(mainWindow);
+          app.hide();
         }
         break;
       default:
       }
     }
-  });
-
-  mainWindow.on('sheet-end', () => {
-    mainWindow.webContents.send('focus-on-webview');
   });
 
   // Register keyboard shortcuts

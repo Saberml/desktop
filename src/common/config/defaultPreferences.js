@@ -7,14 +7,14 @@
  * @param {number} version - Scheme version. (Not application version)
  */
 const defaultPreferences = {
-  version: 1,
+  version: 2,
   teams: [],
   showTrayIcon: false,
   trayIconTheme: 'light',
   minimizeToTray: false,
   notifications: {
-    flashWindow: 0,
-    bounceIcon: false,
+    flashWindow: 2,
+    bounceIcon: true,
     bounceIconType: 'informational',
   },
   showUnreadBadge: true,
@@ -22,6 +22,7 @@ const defaultPreferences = {
   enableHardwareAcceleration: true,
   autostart: true,
   spellCheckerLocale: 'en-US',
+  darkMode: false,
 };
 
 export default defaultPreferences;

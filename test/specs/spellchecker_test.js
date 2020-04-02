@@ -23,11 +23,16 @@ describe('main/Spellchecker.js', function() {
       SpellChecker.getSpellCheckerLocale('nl').should.equal('nl-NL');
       SpellChecker.getSpellCheckerLocale('nl-NL').should.equal('nl-NL');
 
+      SpellChecker.getSpellCheckerLocale('pl').should.equal('pl-PL');
+      SpellChecker.getSpellCheckerLocale('pl-PL').should.equal('pl-PL');
       SpellChecker.getSpellCheckerLocale('pt').should.equal('pt-BR');
       SpellChecker.getSpellCheckerLocale('pt-BR').should.equal('pt-BR');
 
       SpellChecker.getSpellCheckerLocale('ja').should.equal('en-US');
       SpellChecker.getSpellCheckerLocale('ja-JP').should.equal('en-US');
+
+      SpellChecker.getSpellCheckerLocale('it').should.equal('it-IT');
+      SpellChecker.getSpellCheckerLocale('it-IT').should.equal('it-IT');
     });
   });
 

@@ -12,9 +12,11 @@
   },
   "files": [
     "main_bundle.js",
-    "browser/**/*{.html,.css,_bundle.js}",
+    "browser/**/*{.html,.css,_bundle.js,.svg,.png}",
     "assets/**/*",
+    "browser/assets/fonts/*",
     "node_modules/bootstrap/dist/**",
+    "node_modules/font-awesome/{css,fonts}/**",
     "node_modules/simple-spellchecker/dict/*.dic"
   ],
   "protocols": [
@@ -25,6 +27,7 @@
       ]
     }
   ],
+  "afterPack": "scripts/afterpack.js",
   "afterSign": "scripts/notarize.js",
   "deb": {
     "synopsis": "Mattermost"

@@ -1,6 +1,9 @@
 // Copyright (c) 2015-2016 Yuya Ochiai
 // Copyright (c) 2016-present Mattermost, Inc. All Rights Reserved.
 // See LICENSE.txt for license information.
+// eslint-disable-next-line eslint-comments/disable-enable-pair
+/* eslint-disable react/no-set-state */
+
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -77,7 +80,7 @@ export default class Finder extends React.Component {
   render() {
     return (
       <div id='finder'>
-        <div className='finder'>
+        <div className={`finder${process.platform === 'darwin' ? ' macOS' : ''}`}>
           <div className='finder-input-wrapper'>
             <input
               className='finder-input'

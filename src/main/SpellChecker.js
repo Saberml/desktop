@@ -107,8 +107,14 @@ SpellChecker.getSpellCheckerLocale = (electronLocale) => {
   if (electronLocale.match(/^nl-?/)) {
     return 'nl-NL';
   }
+  if (electronLocale.match(/^pl-?/)) {
+    return 'pl-PL';
+  }
   if (electronLocale.match(/^pt-?/)) {
     return 'pt-BR';
+  }
+  if (electronLocale.match(/^it-?/)) {
+    return 'it-IT';
   }
   return 'en-US';
 };

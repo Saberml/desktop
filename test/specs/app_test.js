@@ -34,6 +34,20 @@ describe('application', function desc() {
     visible.should.be.true;
   });
 
+  if (process.platform === 'darwin') {
+    it.skip('should show closed window with cmd+tab', async () => {
+      // Unable to utilize Command key press due to: https://bugs.chromium.org/p/chromedriver/issues/detail?id=3023#c2
+      await this.app.client.waitUntilWindowLoaded();
+      await this.app.client.keys(['Meta', 'w']);
+      let visible = await this.app.browserWindow.isVisible();
+      visible.should.be.false;
+
+      this.app.client.keys(['Meta', 'Tab']);
+      visible = await this.app.browserWindow.isVisible();
+      visible.should.be.true;
+    });
+  }
+
   it.skip('should restore window bounds', async () => {
     // bounds seems to be incorrectly calculated in some environments
     // - Windows 10: OK
@@ -72,13 +86,15 @@ describe('application', function desc() {
 
   it('should show index.html when there is config file', async () => {
     const config = {
-      version: 1,
+      version: 2,
       teams: [{
         name: 'example',
         url: env.mattermostURL,
+        order: 0,
       }, {
         name: 'github',
         url: 'https://github.com/',
+        order: 1,
       }],
       showTrayIcon: false,
       trayIconTheme: 'light',
@@ -92,6 +108,7 @@ describe('application', function desc() {
       useSpellChecker: true,
       enableHardwareAcceleration: true,
       autostart: true,
+      darkMode: false,
     };
     fs.writeFileSync(env.configFilePath, JSON.stringify(config));
     await this.app.restart();

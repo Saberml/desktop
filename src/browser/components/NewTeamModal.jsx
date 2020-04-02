@@ -9,13 +9,18 @@ import {Modal, Button, FormGroup, FormControl, ControlLabel, HelpBlock} from 're
 import Utils from '../../utils/util';
 
 export default class NewTeamModal extends React.Component {
-  constructor() {
-    super();
+  static defaultProps = {
+    restoreFocus: true,
+  };
+
+  constructor(props) {
+    super(props);
 
     this.wasShown = false;
     this.state = {
       teamName: '',
       teamUrl: '',
+      teamOrder: props.currentOrder || 0,
       saveStarted: false,
     };
   }
@@ -25,6 +30,7 @@ export default class NewTeamModal extends React.Component {
       teamName: this.props.team ? this.props.team.name : '',
       teamUrl: this.props.team ? this.props.team.url : '',
       teamIndex: this.props.team ? this.props.team.index : false,
+      teamOrder: this.props.team ? this.props.team.order : (this.props.currentOrder || 0),
       saveStarted: false,
     });
   }
@@ -40,7 +46,7 @@ export default class NewTeamModal extends React.Component {
     return this.getTeamNameValidationError() === null ? null : 'error';
   }
 
-  handleTeamNameChange(e) {
+  handleTeamNameChange = (e) => {
     this.setState({
       teamName: e.target.value,
     });
@@ -66,7 +72,7 @@ export default class NewTeamModal extends React.Component {
     return this.getTeamUrlValidationError() === null ? null : 'error';
   }
 
-  handleTeamUrlChange(e) {
+  handleTeamUrlChange = (e) => {
     this.setState({
       teamUrl: e.target.value,
     });
@@ -91,7 +97,7 @@ export default class NewTeamModal extends React.Component {
            this.getTeamUrlValidationState() === null;
   }
 
-  save() {
+  save = () => {
     this.setState({
       saveStarted: true,
     }, () => {
@@ -100,6 +106,7 @@ export default class NewTeamModal extends React.Component {
           url: this.state.teamUrl,
           name: this.state.teamName,
           index: this.state.teamIndex,
+          order: this.state.teamOrder,
         });
       }
     });
@@ -131,7 +138,11 @@ export default class NewTeamModal extends React.Component {
         className='NewTeamModal'
         show={this.props.show}
         id='newServerModal'
+        enforceFocus={true}
+        onEntered={() => this.teamNameInputRef.focus()}
         onHide={this.props.onClose}
+        container={this.props.modalContainer}
+        restoreFocus={this.props.restoreFocus}
         onKeyDown={(e) => {
           switch (e.key) {
           case 'Enter':
@@ -162,10 +173,17 @@ export default class NewTeamModal extends React.Component {
                 type='text'
                 value={this.state.teamName}
                 placeholder='Server Name'
-                onChange={this.handleTeamNameChange.bind(this)}
+                onChange={this.handleTeamNameChange}
+                inputRef={(ref) => {
+                  this.teamNameInputRef = ref;
+                  if (this.props.setInputRef) {
+                    this.props.setInputRef(ref);
+                  }
+                }}
                 onClick={(e) => {
                   e.stopPropagation();
                 }}
+                autofocus='true'
               />
               <FormControl.Feedback/>
               <HelpBlock>{'The name of the server displayed on your desktop app tab bar.'}</HelpBlock>
@@ -180,7 +198,7 @@ export default class NewTeamModal extends React.Component {
                 type='text'
                 value={this.state.teamUrl}
                 placeholder='https://example.com'
-                onChange={this.handleTeamUrlChange.bind(this)}
+                onChange={this.handleTeamUrlChange}
                 onClick={(e) => {
                   e.stopPropagation();
                 }}
@@ -204,7 +222,7 @@ export default class NewTeamModal extends React.Component {
           >{'Cancel'}</Button>
           <Button
             id='saveNewServerModal'
-            onClick={this.save.bind(this)}
+            onClick={this.save}
             disabled={!this.validateForm()}
             bsStyle='primary'
           >{this.getSaveButtonLabel()}</Button>
@@ -221,4 +239,8 @@ NewTeamModal.propTypes = {
   team: PropTypes.object,
   editMode: PropTypes.bool,
   show: PropTypes.bool,
+  modalContainer: PropTypes.object,
+  restoreFocus: PropTypes.bool,
+  currentOrder: PropTypes.number,
+  setInputRef: PropTypes.ref,
 };
